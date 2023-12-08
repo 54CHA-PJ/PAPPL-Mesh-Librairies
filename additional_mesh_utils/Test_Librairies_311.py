@@ -169,7 +169,7 @@ liste_pymeshlab["mesh_pylab_ed_zz"] = mesh_pylab_ed_zz
 # -------------------------
 #         VOXELFUSE  
 
-print("\n--- Voxelfuse ---\n")
+""" print("\n--- Voxelfuse ---\n")
 liste_voxelfuse = {}
 
 vf_test = vf.VoxelModel(test)
@@ -180,7 +180,7 @@ liste_voxelfuse["mesh_vf_nonsmooth"]=mesh_vf_nonsmooth
 
 print("\nAvec lissage") #Takes 3 minutes ...
 mesh_vf_smooth = vf.Mesh.marchingCubes(vf_test, True)
-liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth
+liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth """
 
 # ------------------------------------------------------------------------------
 #    EXPORTATION DES MESH
@@ -194,7 +194,7 @@ print("Volume de la label map :\n", volVoxels)
 print("\n--- Pymeshlab ---\n")
 
 for key, mesh in liste_pymeshlab.items():
-    mesh.transform_scale_normalize(axisx=0.55, axisy=0.55, axisz=0.55)
+    mesh.compute_matrix_from_scaling_or_normalization(axisx=0.55, axisy=0.55, axisz=0.55)
     mesh.save_current_mesh(key+ ".obj")
     mesh.save_current_mesh(key+".stl")
     try:

@@ -8,7 +8,7 @@ import vtk
 # ----------------------------------
 # Afficher un .obj
 
-def showObjCam(mesh_path, cam, z=1, save_image = False, show_3d = True, output_folder_path = "."):
+def showObjCam(mesh_path, cam, z=1, save_image=False, show_3d=True, output_folder_path="."):
     """shows a 3d parametrable view of the object. has an option to save the view into a flat image file
     Args:
         mesh_path (_type_): path to the mesh
@@ -21,34 +21,34 @@ def showObjCam(mesh_path, cam, z=1, save_image = False, show_3d = True, output_f
     print(mesh_path)
     try:
         mesh = load(mesh_path).color('gray')
-    except FileNotFoundError :
+    except FileNotFoundError:
         print("File not found")
         return 0
-    
-    if save_image: 
-        plt = Plotter(bg='white', offscreen=True) # the plot will not be showed
+
+    if save_image:
+        plt = Plotter(bg='white', offscreen=True)  # the plot will not be showed
         plt += mesh
         plt.camera.SetPosition(cam['position'])
         plt.camera.SetFocalPoint(cam['focal_point'])
         plt.camera.SetViewUp(cam['viewup'])
         plt.camera.SetDistance(cam['distance'])
         plt.camera.SetClippingRange(cam['clipping_range'])
-        plt.show(zoom = z, interactive=False)
-        plt.screenshot(filename = mesh_path + ".png")
+        plt.show(zoom=z, interactive=False)
+        plt.screenshot(filename=path.join(output_folder_path, path.basename(mesh_path) + ".png"))
         plt.close()
-    if show_3d: 
+    if show_3d:
         plt2 = Plotter(bg='black')
         plt2 += mesh
-        plt2.title=mesh_path
+        plt2.title = mesh_path
         plt2.camera.SetPosition(cam['position'])
         plt2.camera.SetFocalPoint(cam['focal_point'])
         plt2.camera.SetViewUp(cam['viewup'])
         plt2.camera.SetDistance(cam['distance'])
         plt2.camera.SetClippingRange(cam['clipping_range'])
-        plt2.show(zoom = z, interactive=True)
+        plt2.show(zoom=z, interactive=True)
         plt2.close()
 
-def showFolderCam(folder_path, cam, z=1, save_image = False, show_details = False, show_3d = True, name = "", output_folder_path = "."):
+def showFolderCam(folder_path, cam, z=1, save_image=False, show_details=False, show_3d=True, name="", output_folder_path="."):
     """show all the 3d meshes in the folder
     Args:
         folder_path (string): path to the folder containing the meshes
@@ -60,14 +60,14 @@ def showFolderCam(folder_path, cam, z=1, save_image = False, show_details = Fals
     for file in listdir(folder_path):
         if file.endswith(".obj") or file.endswith(".stl"):
             # Montrer l'objet
-            showObjCam(file, cam, z, save_image, show_3d, output_folder_path)
+            showObjCam(path.join(folder_path, file), cam, z, save_image, show_3d, output_folder_path)
             # Donner la taille de l'objet
             if show_size:
                 file_size = path.getsize(path.join(folder_path, file))
                 # Save data in the dictionary
                 data['File Name'].append(file)
                 data['File Size (B)'].append(file_size)
-                data['File Size (MB)'].append(file_size/(1024*1024))
+                data['File Size (MB)'].append(file_size / (1024 * 1024))
                 data['Mesh Volume'].append(volume(path.join(folder_path, file)))
     if show_details:
         import pandas as pd
@@ -75,7 +75,7 @@ def showFolderCam(folder_path, cam, z=1, save_image = False, show_details = Fals
         # Create a DataFrame
         df = pd.DataFrame(data)
         # Save DataFrame to Excel file
-        excel_file_path = name+'_file_sizes.xlsx'  # Change this to your desired file path
+        excel_file_path = name + '_file_sizes.xlsx'
         df.to_excel(excel_file_path, index=False)
         print(f"File sizes saved to {excel_file_path}")
                 
