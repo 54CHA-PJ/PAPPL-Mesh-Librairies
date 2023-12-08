@@ -1,7 +1,6 @@
 from os import getcwd, chdir, path
 from glob import glob
 from objtools import *
-
 import time
 import nibabel as nib
 from skimage import measure
@@ -9,7 +8,6 @@ import pymeshlab
 import voxelfuse as vf       
 import vtk
 import numpy as np
-
 
 # _______________________________ INPUT ZONE ___________________________________
 
