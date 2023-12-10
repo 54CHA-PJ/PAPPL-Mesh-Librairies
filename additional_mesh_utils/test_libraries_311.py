@@ -173,7 +173,7 @@ liste_pymeshlab["mesh_pylab_ed_zz"] = mesh_pylab_ed_zz
 # -------------------------
 #         VOXELFUSE  
 
-print("\n--- Voxelfuse ---\n")
+""" print("\n--- Voxelfuse ---\n")
 liste_voxelfuse = {}
 
 vf_test = vf.VoxelModel(test)
@@ -184,7 +184,7 @@ liste_voxelfuse["mesh_vf_nonsmooth"]=mesh_vf_nonsmooth
 
 print("\nAvec lissage") #Takes 3 minutes ...
 mesh_vf_smooth = vf.Mesh.marchingCubes(vf_test, True)
-liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth
+liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth """
 
 # ------------------------------------------------------------------------------
 #    EXPORTATION DES MESH

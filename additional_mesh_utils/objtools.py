@@ -31,7 +31,7 @@ def showObj(mesh_path, pitch=-30, yaw=30, roll =0, z=1, save_image = False, show
         plt.show(zoom=z, interactive=False)
         plt.screenshot(filename=path.join(output_folder_path, path.basename(mesh_path) + ".png"))
         plt.close()
-    if show_3d: 
+    if show_3d:
         plt2 = Plotter(bg='black')
         plt2 += mesh
         plt2.camera.Pitch(pitch)
