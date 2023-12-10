@@ -9,7 +9,6 @@ _____________________________
 |___________________________|
 
 This program takes a label-map NIFTI (.nii /.nii.gz) file and creates a 3D Mesh from it 
-
 Please refer to the "additional_mesh_utils" to see other useful functions that weren't needed for this function
 
 """
@@ -22,8 +21,19 @@ from skimage import measure     # Marching Cubes algorithm
 import pymeshlab                # Mesh manipulation library
 import vtk                      # Mesh manipulation library
 
+
+
+# _______________________________ INPUT ZONE ___________________________________
+
+directory       = path.join( getcwd(), "additional_mesh_utils")
+labelmap_dir    = path.join(directory, "Labelmap_input", "gluteus_max.nii.gz")
+out_folder_dir  = path.join(directory, "3D_output")
+
 dir = getcwd()
 print(dir)
+print(labelmap_dir)
+
+# ______________________________________________________________________________
 
 def generate_from_nii(
     nii_dir, 
@@ -42,23 +52,28 @@ def generate_from_nii(
 
     Args:
         nii_dir         (str):              Location of the NIFTI file.
+        
         library         (str, optional):    Choose the library : "pymeshlab" / "nii2mesh" / "vtk".
-        simplify        (str, optional):    Choose the simplification method.       (DEPENDS ON THE LIBRARY)
-        smoothing       (str, optional):    Choose the smoothing method.            (DEPENDS ON THE LIBRARY)
+        simplify        (str, optional):    Choose the simplification method.             (DEPENDS ON THE LIBRARY)
+        smoothing       (str, optional):    Choose the smoothing method.                  (DEPENDS ON THE LIBRARY)
         smoothing_value (float, optional):  The coefficient of the smoothing method.      (DEPENDS ON THE LIBRARY)
         simplify_value  (float, optional):  The coefficient of the simplifying method.    (DEPENDS ON THE LIBRARY)
-        info_doc        (bool, optional):   If true, creates a document containing useful information. (Volume, file size, volumetric error, ...)
-        visualize       (bool, optional):   If true, opens a wintow to visualize the 3D mesh after creating it.
-        out_type        (str, optional):    Choose the output file type : "obj" / "stl".
+        
+        out_type        (str, optional):    Choose the output file type : "obj" / "stl".  (DEPENDS ON THE LIBRARY)
         out_dir         (str, optional):    Choose the output directory.
         out_name        (str, optional):    Choose a name for the file. If no name is chosen, the default name is made using the other parameters.
-    
+        
+        info_doc        (bool, optional):   If true, creates a document containing useful information. (Volume, file size, volumetric error, ...)
+        visualize       (bool, optional):   If true, opens a wintow to visualize the 3D mesh after creating it.
     -------------------------------------------------------------------------------------------------------------------------------------------------
     
-    (DEPENDS ON THE LIBRARY) : SPECIFICATIONS
+    (DEPENDS ON THE LIBRARY) --> SPECIFICATIONS
     
     ---------------------------
     library = "pymeshlab"
+    
+    simplify :
+        "
     ---------------------------
     
     
@@ -72,3 +87,12 @@ def generate_from_nii(
     ---------------------------
     
     """
+    
+    if out_name == "":
+        mesh_name = 
+    
+    if library == "pymeshlab":
+        mesh_dir = generate_pymeshlab()
+        
+        
+    
