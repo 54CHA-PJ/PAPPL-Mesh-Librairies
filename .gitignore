@@ -2,3 +2,6 @@ additional_mesh_utils/3D_output_pictures/generated_from_python
 additional_mesh_utils/3D_output/generated_from_python
 additional_mesh_utils/3D_output/generated_from_c
 additional_mesh_utils/Labelmap_input
+
+__pycache__/
+*.pyc
