@@ -118,11 +118,11 @@ mesh_pylab_lapHC.add_mesh(m_pymeshlab)
 mesh_pylab_lapHC.apply_coord_hc_laplacian_smoothing() 
 liste_pymeshlab["mesh_pylab_lapHC"] = mesh_pylab_lapHC
 
-""" print("\nTaubin 10")
+print("\nTaubin 10")
 mesh_pylab_tau10 = pymeshlab.MeshSet()
 mesh_pylab_tau10.add_mesh(m_pymeshlab)
 mesh_pylab_tau10.apply_coord_taubin_smoothing()
-liste_pymeshlab["mesh_pylab_tau10"] = mesh_pylab_tau10 """
+liste_pymeshlab["mesh_pylab_tau10"] = mesh_pylab_tau10
 
 # ------ DECIMATION (Simplification) -------- 
 

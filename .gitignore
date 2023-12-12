@@ -3,5 +3,8 @@ additional_mesh_utils/3D_output/generated_from_python
 additional_mesh_utils/3D_output/generated_from_c
 additional_mesh_utils/Labelmap_input
 
+nii_mesh_generation/input_files
+nii_mesh_generation/output_files
+
 __pycache__/
 *.pyc
