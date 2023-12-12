@@ -4,7 +4,7 @@ import subprocess
 import os
 import shutil
 
-def mesh_gen_nii2mesh(nii2mesh_path, input_file, out_name, out_dir, out_type, smoothing = "", smooth_val = 1, simplify = "", simply_val = 1, verbose = False):
+def mesh_gen_nii2mesh(nii2mesh_path, input_file, out_name, out_dir, out_type, smooth_val = 0, simply_val = 100, verbose = False):
     """    
     Generates a mesh using nii2mesh code, made on C.
     
@@ -35,43 +35,45 @@ def mesh_gen_nii2mesh(nii2mesh_path, input_file, out_name, out_dir, out_type, sm
     
     param = ""
     
-    if (smoothing != ""):
-        param += f"-s {str(smooth_val)} "
-    
-    if (simplify != ""):
-        param += f"-r {str(simply_val)} "
-    
-    if verbose:
+    param += f"-s {str(smooth_val)} "       # Value between 1 and 10
+    param += f"-r {str(simply_val/100)} "   # Value between 0.05 and 1
+    if verbose :
         param += "-v 1"
     
+    print(param)
     command = f'nii2mesh {input_file} {param} {out_name}{"." + out_type}'
-    full_command = f' cd /D {nii2mesh_path} && {command}'
+    full_command = f'cd {nii2mesh_path} && {command}'
     
     try:
-        subprocess.run(['cmd', '/C', 'start', '/wait','cmd', '/C', f'cd /D {nii2mesh_path} && {full_command}'], check=True)
+        subprocess.run(full_command, shell=True, check=True, cwd=nii2mesh_path)
     except FileNotFoundError:
         raise FileNotFoundError("nii2mesh executable not found.")
     except subprocess.CalledProcessError:
         raise subprocess.CalledProcessError("nii2mesh command failed to execute.")
     
-    file = f'{nii2mesh_path}\\{out_name}{"." + out_type}'
+    file = os.path.join(nii2mesh_path, f'{out_name}{"." + out_type}')
     
     # Create the directory if it doesn't exists
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    os.makedirs(out_dir, exist_ok=True)
     
-    # Handle duplicates
+    # Saving the file
+    # Handles duplicates by creating "suffixes" of already existing names
     try:
         shutil.move(file, out_dir)
+        new_file = file
     except shutil.Error:
         suffix = 1
-        new_file = file + f"_{suffix}"
-        while os.path.exists(os.path.join(out_dir, new_file)):
-            # Keep incrementing the suffix until we find a unique name
+        new_file_name = f"{out_name}_{suffix}.{out_type}" 
+        new_file = os.path.join(out_dir, new_file_name) 
+        while os.path.exists(new_file):
             suffix += 1
-            new_file = file + f"_{suffix}"
-        shutil.move(file, os.path.join(out_dir, new_file))
-        print(f"Saved {new_file} in {out_dir}")
-    else:
-        print(f"Saved {file} in {out_dir}")
+            new_file_name = f"{out_name}_{suffix}.{out_type}" 
+            new_file = os.path.join(out_dir, new_file_name) 
+        shutil.move(file, new_file)
+    
+    print("TREST#ETSTEET")
+    return new_file
+
+
+
 
