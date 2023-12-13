@@ -114,7 +114,7 @@ visualize       (bool, optional):   If true, opens a wintow to visualize the 3D 
 
 ### LIBRARY = "pymeshlab"
 
-```sql   
+```python
 ---------------------
 ----- SIMPLIFY ------
 
@@ -139,7 +139,7 @@ ___ --> no simplification (RECOMMENDED)
 ----- SMOOTHING ------
 
 "lap" = Laplacian Coordinate Smoothing (RECOMMENDED)
-    --> The most useful one, almost no volume loss
+    --> Most useful smoothing method, almost no volume loss
         --> smooth_val = number of iterations
         --> example : smooth_val = 5 # means 5 iterations of smoothing
     
@@ -178,31 +178,33 @@ Without normalization -> (1,1,1).
 
 ### LIBRARY = "nii2mesh"
 
-```sql
+```python
 
----------------------
+For nii2mesh, the variables "simplify" and "smoothing" are not needed since there's only one method for each one.
+Instead, the code will detect if you chose coherent "simply_val" and "smooth_val" values
+
 ----- SIMPLIFY ------
 
-"(anything)" = Quadratic Mesh Simplification 
-    --> The most popular simplification method
+if (0 < simply_val < 100):
+___ --> Quadratic Mesh Simplification (RECOMMENDED)
+    --> Most popular simplification method
         --> simply_val = percentage of simplification
         --> example : simply_val = 5  # means 5% of simplification
 
-""  --> no simplification 
-        --> Quadratic Mesh Simplification has a pretty good 
-        --> but if you want to simplify the mesh then do "edmc" with some smoothing ("lap", 5)
-        
-----------------------
+else:
+___ --> No simplification 
+
 ----- SMOOTHING ------
 
-"(anything)" = Laplacian Coordinate Smoothing (RECOMMENDED)
-    --> The most useful one, almost no volume loss
+if (1 <= smooth_val <= 10):
+___ --> Laplacian Coordinate Smoothing (RECOMMENDED)
+    --> Most popular smoothing method
         --> smooth_val = number of iterations
         --> example : smooth_val = 5 # means 5 iterations of smoothing
- 
-___ --> no smoothing 
 
-----------------------
+else:
+___ --> No smoothing 
+
 ------- OUTPUT -------
 
 "obj" / "stl" / "ply" / "fbx"
