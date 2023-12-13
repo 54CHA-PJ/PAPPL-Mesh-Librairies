@@ -178,7 +178,7 @@ Without normalization -> (1,1,1).
 
 ### LIBRARY = "nii2mesh"
 
-```
+```sql
 
 ---------------------
 ----- SIMPLIFY ------
@@ -211,7 +211,7 @@ ___ --> no smoothing
 
 ### LIBRARY = "vtk"
 
-```
+```sql
 --> This library has not been completely researched, so library-specific parameters are unused
 
 --> Only exports to ".obj"
