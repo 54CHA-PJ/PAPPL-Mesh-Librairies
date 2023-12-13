@@ -1,47 +1,120 @@
-<python>
+# Mesh generation from NIFTI files using Python and C Libraries
+
+Authors: **Sacha Cruz, Mario Espinoza**
+
+Date: **05/12/2023**
+```c
 ________________________________
 |                              |
 |   NIFTI -> MESH GENERATION   |
 |______________________________|
 
-Authors : Sacha Cruz , Mario Espinoza
-Date : 05/12/2023
+Requirements:
+- To use the Nii2Mesh library, you need Windows OS because it requires Command Prompt.
+- You can also write the command manually in Linux or Mac environments. (See the nii2mesh section)
 
-Works perfectly with Python versions    : 3.8 - 3.9
-Also works with Python versions         : 3.8 - 3.11 (if you dont visualize the mesh)
+Compatibility:
+- The script works well on Python versions 3.8 - 3.11.
+- Mesh visualization may not be compatible with Python 3.10 - 3.11.
+```
 
-This program takes a label-map NIFTI (.nii /.nii.gz) file and creates a 3D Mesh from it 
+## About the project
 
---> If you want to see other useful functions that weren't needed for this function
-    --> check "additional_mesh_utils" 
+This script takes a single-labeled NIFTI file (.nii / .nii.gz) and converts it into a 3D mesh (.obj / .stl / .ply / .3ds). 
 
-Args (generate_from_nii) :
-
-    nii_dir         (str):              Location of the NIFTI file.
-    grid_scale      (tuple, optional):  Grid normalization values.                  (DEPENDS ON THE LIBRARY)
-    
-    library         (str, optional):    Choose the library : "pymeshlab" / "nii2mesh" / "vtk".
-    
-    simplify        (str, optional):    Choose the simplification method.           (DEPENDS ON THE LIBRARY)
-    smoothing       (str, optional):    Choose the smoothing method.                (DEPENDS ON THE LIBRARY)
-    smooth_val      (float, optional):  The coefficient of the smoothing method.    (DEPENDS ON THE LIBRARY)
-    simply_val      (float, optional):  The coefficient of the simplifying method.  (DEPENDS ON THE LIBRARY)
-    
-    out_type        (str, optional):    Choose the output file type : "obj" / "stl".(DEPENDS ON THE LIBRARY)
-    out_dir         (str, optional):    Choose the output directory.
-    out_name        (str, optional):    Choose a name for the file. If no name is chosen, the default name is made using the other parameters.
-    
-    info_doc        (bool, optional):   If true, creates a document containing useful information. (Volume, file size, volumetric error, ...)
-    visualize       (bool, optional):   If true, opens a wintow to visualize the 3D mesh after creating it.
+More precisely, the code allows to :
+* Create a 3D mesh from a NIFTI file
+    * Choose the library (Pymeshlab, VTK or Nii2Mesh)
+    * Set a mesh-smoothing value 
+    * Set a mesh-simplification value
+* Show the mesh in a 3D object visualizer
+* Store Mesh's details (Mesh volume, File size, etc.) in a TXT file
 
 
-** SPECIFICATIONS **
+It uses already-existing libraries :
+- Pymeshlab : [(Doc)](myLib/README.md)
+- VTK (Python) : [(Doc)](myLib/README.md)
+- Nii2mesh (C) : [(GitHub)](myLib/README.md)
 
-___________________________
+## Project hierarchy and files
 
-LIBRARY = "pymeshlab"
-___________________________
+1. The main code is under the folder : **nii_mesh_generation** 
+    * The main function is on the _*nii_mesh_gen.py*_ file
+    * You can learn how it works on the _*test_nii_mesh_gen.py*_ file
+    * It calls functions from internal libraries :
+        * *mesh_gen_c.py* : calls nii2mesh library made on C
+        * *mesh_gen_python.py* : calls pymeshlab and vtk libraries
+        * *mesh_tools.py* : provides useful tools for mesh visualization and details
 
+2. The additional code is under the folder : **additional_mesh_utils** 
+    * _*test_libraries_311.py*_ --> Create a bunch of 3D objects (trying different libraries, methods and parameters)
+    * _*objtools.py*_ --> provides a lot of useful tools :
+        * Visualize a 3D Mesh in a 3D interactiuve window
+        * Save the current 3D view of a Mesh in a flat 2D image
+        * Save the current Mesh's details in an excel file
+        * Automatizate these functions to a whole folder containing different meshes
+    * --> The purpose is to call the function _*showFolder*_ in the folder where all the 3D meshes where created, to see every mesh one by one
+    * _*test_mesh_simple.py*_ --> tests the showObj function
+    * _*test_mesh_folder.py*_ --> tests the showFolder function
+
+> nii_mesh_generation
+> > *_nii_mesh_gen.py_* <br>
+> > _test_niimeshgen.py_ <br>
+> > source
+> > > _mesh_gen_c_ <br>
+> > > _mesh_gen_python_ <br>
+> > > _mesh_tools_ <br>
+
+> additional_mesh_utils <br>
+> > *_objtools.py_* <br>
+> > _test_libraries_311.py_ <br>
+> > *_test_libraries_308.py_* <br>
+
+
+## SPECIFICATIONS 
+
+Here are the details of the function **generate_from_nii** in the code _nii_mesh_gen.py_
+
+```python
+def generate_from_nii(
+        nii_dir, # location of the NIFTI file
+        grid_scale  = (0.55, 0.55, 0.55),
+        library     = "pymeshlab", 
+        simplify    = "", 
+        simply_val  = 100,
+        smoothing   = "", 
+        smooth_val  = 0,
+        info_doc    = True,
+        visualize   = True,
+        out_type    = "obj",
+        out_dir     = ".",
+        out_name    = "" ):
+```
+
+Parameters are described below :
+
+```sql   
+nii_dir         (str):              Location of the NIFTI file.
+grid_scale      (tuple, optional):  Grid normalization coefficients.
+             
+library         (str, optional):    Choose the library : "pymeshlab" / "nii2mesh" / "vtk".
+
+simplify        (str, optional):    Choose the simplification method.           (DEPENDS OF THE LIBRARY)
+smoothing       (str, optional):    Choose the smoothing method.                (DEPENDS OF THE LIBRARY)
+smooth_val      (float, optional):  The coefficient of the smoothing method.    (DEPENDS OF THE LIBRARY)
+simply_val      (float, optional):  The coefficient of the simplifying method.  (DEPENDS OF THE LIBRARY)
+out_type        (str, optional):    Choose the output file type : "obj" / "stl".(DEPENDS OF THE LIBRARY)
+
+out_dir         (str, optional):    Choose the output directory.
+out_name        (str, optional):    Choose a name for the file. If no name is chosen, the default name is made using the other parameters.
+info_doc        (bool, optional):   If true, creates a document containing useful information. (Volume, file size, volumetric error, ...)
+
+visualize       (bool, optional):   If true, opens a wintow to visualize the 3D mesh after creating it.
+```
+
+### LIBRARY = "pymeshlab"
+
+```sql   
 ---------------------
 ----- SIMPLIFY ------
 
@@ -97,13 +170,15 @@ ___ --> no smoothing
 Default -> (0.55, 0.55, 0.55). 
 Without normalization -> (1,1,1).
 
---> Only used in Pymeshlab
+--> This parameter is only used in Pymeshlab
 --> VTK and Nii2mesh libraries have their own way to get the normalization of the labelmap, so grid_scale is not needed.
-    
-___________________________
 
-LIBRARY = "nii2mesh"
-___________________________
+```
+
+
+### LIBRARY = "nii2mesh"
+
+```
 
 ---------------------
 ----- SIMPLIFY ------
@@ -132,11 +207,13 @@ ___ --> no smoothing
 
 "obj" / "stl" / "ply" / "fbx"
 
-___________________________
+```
 
-LIBRARY = "vtk"
-___________________________
+### LIBRARY = "vtk"
 
+```
 --> This library has not been completely researched, so library-specific parameters are unused
 
 --> Only exports to ".obj"
+
+```
