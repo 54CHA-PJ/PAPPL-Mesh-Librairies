@@ -36,14 +36,12 @@ chdir(path.join(directory, "obj_generated_2"))
 #   MARCHING CUBES
 # ------------------------------------------------------------------------------
 
-# Méthode 1 : Skimage-measure
 verts, faces, normals, values = measure.marching_cubes(test)
 
 # ------------------------------------------------------------------------------
 #   CREATION DU MESH
 # ------------------------------------------------------------------------------
 
-# Méthode 2 : Trimesh
 m_trimesh = trimesh.Trimesh(vertices=verts, faces=faces, vertex_attributes={'normals': normals, 'values': values})
 
 # ------------------------------------------------------------------------------

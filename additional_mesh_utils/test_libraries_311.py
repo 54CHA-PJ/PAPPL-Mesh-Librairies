@@ -11,13 +11,9 @@ import numpy as np
 
 # _______________________________ INPUT ZONE ___________________________________
 
-""" directory       = path.join( getcwd(), "additional_mesh_utils")
-labelmap_dir    = path.join(directory, "Labelmap_input", "gluteus_max.nii.gz")
-out_folder_dir  = path.join(directory, "3D_output") """
-
 directory       = path.join( getcwd(), "additional_mesh_utils")
-labelmap_dir    = path.join(directory, "Labelmap_free_sources", "gluteus_max.nii.gz")
-out_folder_dir  = path.join(directory, "3D_output")
+labelmap_dir    = path.join(directory, "Labelmap_input", "sartorius.nii.gz")
+out_folder_dir  = path.join(directory, "3D_output", "generated_from_python")
 
 print(labelmap_dir)
 
@@ -41,10 +37,6 @@ nifti_vtk.Update()
 
 chdir(out_folder_dir)
 
-#start_time = time.time()
-#elapsed_time = time.time() - start_time 
-#print(f"Elapsed time: {elapsed_time:.1f} seconds")
-
 # ------------------------------------------------------------------------------
 #   MARCHING CUBES
 # ------------------------------------------------------------------------------
@@ -52,12 +44,12 @@ chdir(out_folder_dir)
 # Méthode 1 : Skimage-measure
 verts, faces, normals, values = measure.marching_cubes(test)
 
-# Méthode 3 : VTK 
+# Méthode 2 : VTK 
 model_vtk = vtk.vtkMarchingCubes()
 model_vtk.SetInputConnection(nifti_vtk.GetOutputPort())
 model_vtk.SetValue(0, 0.5)
 
-# Méthode 4 : VoxelFuse (Voir section VoxelFuse)
+# Méthode 3 : VoxelFuse (Voir section VoxelFuse)
 
 # ------------------------------------------------------------------------------
 #   CREATION DU MESH
@@ -138,29 +130,26 @@ mesh_pylab_ed_mdc_05.add_mesh(m_pymeshlab)
 mesh_pylab_ed_mdc_05.meshing_decimation_clustering(threshold = pymeshlab.Percentage(5.0))
 liste_pymeshlab["mesh_pylab_ed_mdc_05"] = mesh_pylab_ed_mdc_05
 
-""" 
-# Inutile !
 print("\nEdge Decimation (Quadratic Edge Collapse)")
 mesh_pylab_ed_qe = pymeshlab.MeshSet()
 mesh_pylab_ed_qe.add_mesh(m_pymeshlab)
 mesh_pylab_ed_qe.meshing_decimation_quadric_edge_collapse()
 liste_pymeshlab["mesh_pylab_ed_qe"] = mesh_pylab_ed_qe 
-"""
 
 # ------ SOLUTION RETENUE -------- 
 
-print("\nEdge Decimation MC + Laplacian 1")
+print("\nEdge Decimation MC + Laplacian 3")
 mesh_pylab_ed_xx = pymeshlab.MeshSet()
 mesh_pylab_ed_xx.add_mesh(m_pymeshlab)
 mesh_pylab_ed_xx.meshing_decimation_edge_collapse_for_marching_cube_meshes()
-mesh_pylab_ed_xx.apply_coord_laplacian_smoothing(stepsmoothnum = 1)
+mesh_pylab_ed_xx.apply_coord_laplacian_smoothing(stepsmoothnum = 3)
 liste_pymeshlab["mesh_pylab_ed_xx"] = mesh_pylab_ed_xx
 
-print("\nEdge Decimation MC + Laplacian 3")
+print("\nEdge Decimation MC + Laplacian 5")
 mesh_pylab_ed_yy = pymeshlab.MeshSet()
 mesh_pylab_ed_yy.add_mesh(m_pymeshlab)
 mesh_pylab_ed_yy.meshing_decimation_edge_collapse_for_marching_cube_meshes()
-mesh_pylab_ed_yy.apply_coord_laplacian_smoothing(stepsmoothnum = 3)
+mesh_pylab_ed_yy.apply_coord_laplacian_smoothing(stepsmoothnum = 5)
 liste_pymeshlab["mesh_pylab_ed_yy"] = mesh_pylab_ed_yy
 
 print("\nEdge Decimation MC + Laplacian HC")
@@ -173,7 +162,7 @@ liste_pymeshlab["mesh_pylab_ed_zz"] = mesh_pylab_ed_zz
 # -------------------------
 #         VOXELFUSE  
 
-""" print("\n--- Voxelfuse ---\n")
+print("\n--- Voxelfuse ---\n")
 liste_voxelfuse = {}
 
 vf_test = vf.VoxelModel(test)
@@ -184,7 +173,7 @@ liste_voxelfuse["mesh_vf_nonsmooth"]=mesh_vf_nonsmooth
 
 print("\nAvec lissage") #Takes 3 minutes ...
 mesh_vf_smooth = vf.Mesh.marchingCubes(vf_test, True)
-liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth """
+liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth
 
 # ------------------------------------------------------------------------------
 #    EXPORTATION DES MESH

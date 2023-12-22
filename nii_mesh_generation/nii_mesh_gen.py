@@ -9,7 +9,7 @@ ________________________________
 This script takes a labeled NIFTI (.nii or .nii.gz) file and converts it into a 3D mesh. 
 
 (IMPORTANT) Notes:
--  Refer to README.md for an extensive explanation of function parameters and usages.
+- Refer to README.md for an extensive explanation of function parameters and usages.
 - For other useful functions not required by this script, check the folder "additional_mesh_utils"."
 
 Compatibility: 
@@ -114,3 +114,127 @@ def generate_from_nii(
         raise ValueError("Wrong Library Name")
 
     return mesh_path
+
+
+"""
+____________________________
+
+    LIBRARY = "pymeshlab"
+____________________________
+
+
+
+
+---------------------
+----- SIMPLIFY ------
+
+"edmc" = Edge Decimation for Marching Cubes 
+    --> The most useful one, but the simplification may be a bit too intense
+        --> simply_val not needed
+        
+"edqe" = Edge Decimation Quadratic Edge Collapse (~ USELESS)  
+    --> Empirically useless - mesh is not simplified - maybe it's useful for non-marching cubes meshes
+        --> simply_val not needed
+
+"mdc"  = Meshing Decimation Clustering            
+    --> Simplification is too intense, mesh loses its volume properties
+        --> simply_val = percentage of simplification
+        --> example : simply_val = 5  # means 5% of simplification
+
+___ --> no simplification (RECOMMENDED)
+        --> Pymeshlab's simplification methods are likely to create too much volume loss... 
+        --> But if you want to simplify the mesh then do "edmc" with some smoothing ("lap", 5)
+        
+----------------------
+----- SMOOTHING ------
+
+"lap" = Laplacian Coordinate Smoothing (RECOMMENDED)
+    --> The most useful one, almost no volume loss
+        --> smooth_val = number of iterations
+        --> example : smooth_val = 5 # means 5 iterations of smoothing
+    
+"hc" = Laplacian Coordinate Smoothing - HC method (~ USELESS)  
+    --> Empirically useless - mesh is not smoothed - maybe it's useful for non-marching cubes meshes
+        --> smooth_val not needed
+    
+"tau"  = Taubin Coordinate Smoothing (~ USELESS)      
+    --> Empirically useless - mesh is not smoothed - maybe it's useful for non-marching cubes meshes
+        --> smooth_val not needed
+        
+___ --> no smoothing 
+
+----------------------
+------- OUTPUT -------
+
+"obj" = Wavefront 3D Mesh 
+    --> The most understandable mesh format
+    --> Present in every 3D software
+    
+"stl" = Stereolithography
+    --> Very compressed (50% reduction)
+    --> File is not understandable by an human
+    
+----------------------
+----- GRID SCALE -----
+
+Default -> (0.55, 0.55, 0.55). 
+Without normalization -> (1,1,1).
+
+--> This parameter is only used in Pymeshlab
+--> VTK and Nii2mesh libraries have their own way to get the normalization of the labelmap, so grid_scale is not needed.
+
+
+
+
+____________________________
+
+    LIBRARY = "nii2mesh"
+____________________________
+
+
+
+
+---------------------
+----- SIMPLIFY ------
+
+"(anything)" = Quadratic Mesh Simplification 
+    --> The most popular simplification method
+        --> simply_val = percentage of simplification
+        --> example : simply_val = 5  # means 5% of simplification
+
+""  --> no simplification 
+        --> Quadratic Mesh Simplification has a pretty good 
+        --> but if you want to simplify the mesh then do "edmc" with some smoothing ("lap", 5)
+        
+----------------------
+----- SMOOTHING ------
+
+"(anything)" = Laplacian Coordinate Smoothing (RECOMMENDED)
+    --> The most useful one, almost no volume loss
+        --> smooth_val = number of iterations
+        --> example : smooth_val = 5 # means 5 iterations of smoothing
+ 
+___ --> no smoothing 
+
+----------------------
+------- OUTPUT -------
+
+"obj" / "stl" / "ply" / "fbx"
+
+
+
+
+_________________________
+
+     LIBRARY = "vtk"
+_________________________
+
+
+
+
+--> This library has not been completely researched, so library-specific parameters are unused
+
+--> Only exports to ".obj"
+
+
+"""
