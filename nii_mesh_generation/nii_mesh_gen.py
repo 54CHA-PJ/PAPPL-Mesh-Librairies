@@ -38,7 +38,7 @@ from pathlib import Path
 from source.mesh_gen_python import mesh_gen_pylab
 from source.mesh_gen_python import mesh_gen_vtk
 from source.mesh_gen_c import mesh_gen_nii2mesh
-
+from source.mesh_tools import show_obj, vol_obj, doc_obj
 
 def generate_from_nii(
         nii_dir, 
@@ -72,7 +72,9 @@ def generate_from_nii(
         info_doc        (bool, optional):   If true, creates a document containing useful information. (Volume, file size, volumetric error, ...)
         visualize       (bool, optional):   If true, opens a wintow to visualize the 3D mesh after creating it.
     
-    --> If you want to know the (depends on the library) specifications, please take a look at the README.md file
+    /!\ If you want to know the (depends on the library) specifications :
+        --> Check the README.md file 
+        --> or check the end of this source code
     """
 
     # Define the paths
@@ -94,6 +96,10 @@ def generate_from_nii(
         if smooth_val > 0:
             mesh_name_parts.append(f"smooth={smooth_val}")
         out_name = "_".join(mesh_name_parts)
+        
+    # ------------------------------
+    # CREATE THE MESH
+    # ------------------------------
     
     if library == "pymeshlab":
         print("\n--------------------\n     PYMESHLAB      \n--------------------\n")
@@ -112,20 +118,37 @@ def generate_from_nii(
         print("mesh path :", mesh_path)
     else:
         raise ValueError("Wrong Library Name")
+    
+    # ------------------------------
+    # SHOW THE MESH
+    # ------------------------------
+    
+    if visualize:
+        print("Showing generated Mesh...")
+        show_obj(mesh_path)
+        print("Volume =", vol_obj(mesh_path))
+    
+    # ------------------------------
+    # SAVE MESH DATA
+    # ------------------------------
+    
+    if info_doc:
+        print("Saving Mesh info...")
+        doc_obj(mesh_path)
 
-    return mesh_path
+
+
+
+
+
 
 
 """
+(DEPENDS ON THE LIBRARY) specifications :
+
 ____________________________
+____LIBRARY = "pymeshlab"___
 
-    LIBRARY = "pymeshlab"
-____________________________
-
-
-
-
----------------------
 ----- SIMPLIFY ------
 
 "edmc" = Edge Decimation for Marching Cubes 
@@ -145,7 +168,6 @@ ___ --> no simplification (RECOMMENDED)
         --> Pymeshlab's simplification methods are likely to create too much volume loss... 
         --> But if you want to simplify the mesh then do "edmc" with some smoothing ("lap", 5)
         
-----------------------
 ----- SMOOTHING ------
 
 "lap" = Laplacian Coordinate Smoothing (RECOMMENDED)
@@ -163,7 +185,6 @@ ___ --> no simplification (RECOMMENDED)
         
 ___ --> no smoothing 
 
-----------------------
 ------- OUTPUT -------
 
 "obj" = Wavefront 3D Mesh 
@@ -173,8 +194,7 @@ ___ --> no smoothing
 "stl" = Stereolithography
     --> Very compressed (50% reduction)
     --> File is not understandable by an human
-    
-----------------------
+
 ----- GRID SCALE -----
 
 Default -> (0.55, 0.55, 0.55). 
@@ -183,18 +203,9 @@ Without normalization -> (1,1,1).
 --> This parameter is only used in Pymeshlab
 --> VTK and Nii2mesh libraries have their own way to get the normalization of the labelmap, so grid_scale is not needed.
 
-
-
-
 ____________________________
+____LIBRARY = "nii2mesh"____
 
-    LIBRARY = "nii2mesh"
-____________________________
-
-
-
-
----------------------
 ----- SIMPLIFY ------
 
 "(anything)" = Quadratic Mesh Simplification 
@@ -205,8 +216,7 @@ ____________________________
 ""  --> no simplification 
         --> Quadratic Mesh Simplification has a pretty good 
         --> but if you want to simplify the mesh then do "edmc" with some smoothing ("lap", 5)
-        
-----------------------
+
 ----- SMOOTHING ------
 
 "(anything)" = Laplacian Coordinate Smoothing (RECOMMENDED)
@@ -216,25 +226,13 @@ ____________________________
  
 ___ --> no smoothing 
 
-----------------------
 ------- OUTPUT -------
 
 "obj" / "stl" / "ply" / "fbx"
-
-
-
-
 _________________________
-
-     LIBRARY = "vtk"
-_________________________
-
-
-
+_____LIBRARY = "vtk"_____
 
 --> This library has not been completely researched, so library-specific parameters are unused
-
 --> Only exports to ".obj"
-
 
 """

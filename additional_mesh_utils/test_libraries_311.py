@@ -12,7 +12,7 @@ import numpy as np
 # _______________________________ INPUT ZONE ___________________________________
 
 directory       = path.join( getcwd(), "additional_mesh_utils")
-labelmap_dir    = path.join(directory, "Labelmap_input", "sartorius.nii.gz")
+labelmap_dir    = path.join(directory, "Labelmap_input", "gluteus_max.nii.gz")
 out_folder_dir  = path.join(directory, "3D_output", "generated_from_python")
 
 print(labelmap_dir)
