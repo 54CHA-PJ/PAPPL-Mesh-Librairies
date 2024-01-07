@@ -55,7 +55,7 @@ def showFolder(folder_path, pitch=-30, yaw=30, roll =0,  z=1, save_image=False, 
                 data['File Name'].append(file)
                 data['File Size (B)'].append(file_size)
                 data['File Size (MB)'].append(file_size / (1024 * 1024))
-                data['Mesh Volume'].append(volume(path.join(folder_path, file)))
+                data['Mesh Volume'].append(vol_obj(path.join(folder_path, file)))
     if show_details:
         import pandas as pd
         import openpyxl
@@ -127,7 +127,8 @@ def showFolderCam(folder_path, cam, z=1, save_image=False, show_details=False, s
                 data['File Name'].append(file)
                 data['File Size (B)'].append(file_size)
                 data['File Size (MB)'].append(file_size / (1024 * 1024))
-                data['Mesh Volume'].append(volume(path.join(folder_path, file)))
+                data['Mesh Volume'].append(vol_obj(path.join(folder_path, file)))
+                
     if show_details:
         import pandas as pd
         import openpyxl
@@ -150,12 +151,6 @@ def convex_hull_volume(file_path):
     vertices = mesh.vertex_matrix() 
     hull = ConvexHull(vertices)
     return hull.volume 
-    
-def volume(file_path):
-    import pymeshlab
-    mset = pymeshlab.MeshSet()
-    mset.load_new_mesh(file_path)
-    return (pymeshlab_volume(mset))
 
 def trimesh_volume(mesh):
     vol = abs(round(mesh.volume, 2))
@@ -196,6 +191,17 @@ def showError(nbVoxels, volume):
     # print("Différence volumétrique: ", diff)
     
     print("Erreur volumétrique: \n",round((diff/nbVoxels)*100, 5), "%")
+
+def vol_obj(file_path):
+    reader = vtk.vtkOBJReader()
+    reader.SetFileName(file_path)
+    reader.Update()
+    # Create a mass properties filter and set the input
+    mass = vtk.vtkMassProperties()
+    mass.SetInputConnection(reader.GetOutputPort())
+    # Print the volume
+    volume = mass.GetVolume()
+    return(volume)
 
 # ----------------------------------
 # Temps d'execution

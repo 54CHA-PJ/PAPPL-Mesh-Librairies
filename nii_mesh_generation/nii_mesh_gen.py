@@ -30,10 +30,14 @@ Custom Modules:
 - `mesh_gen_python.py`  provides Python-based mesh generation tools.
 - `mesh_gen_c.py`          provides C-based mesh generation tools.
 - `mesh_tools.py`       includes utilities for displaying a mesh and its details.
+
 """
 
-from os import path
+from os import makedirs, path
 from pathlib import Path
+from numpy import count_nonzero
+import nibabel as nib
+import time
 
 from source.mesh_gen_python import mesh_gen_pylab
 from source.mesh_gen_python import mesh_gen_vtk
@@ -65,7 +69,7 @@ def generate_from_nii(
         smooth_val      (int, optional):  The coefficient of the smoothing method.      (DEPENDS ON THE LIBRARY)
         simply_val      (int, optional):  The coefficient of the simplifying method.    (DEPENDS ON THE LIBRARY)
         # -----------------------------------------------------------------------------------------------------------------------------------------
-        out_type        (str, optional):    Choose the output file type : "obj" / "stl".(DEPENDS ON THE LIBRARY)
+        out_type        (str, optional):    Choose the output file type                 (DEPENDS ON THE LIBRARY)
         out_dir         (str, optional):    Choose the output file directory.
         out_name        (str, optional):    Choose a name for the file. If no name is chosen, the default name is made using the other parameters.
         # -----------------------------------------------------------------------------------------------------------------------------------------
@@ -74,22 +78,33 @@ def generate_from_nii(
     
     /!\ If you want to know the (depends on the library) specifications :
         --> Check the README.md file 
-        --> or check the end of this source code
+        --> or check the end of *this code*
     """
+    
+    # ------------------------------
+    # INITIALIZATION
+    # ------------------------------
 
     # Define the paths
     dir_path = Path(__file__).resolve().parent
     nii2mesh_path = dir_path / "source" / "nii2mesh" / "src"
     mesh_path = None
+    initial_time = time.time()
     
     # Validate input parameters
     if simply_val < 5 or simply_val > 100:
         raise ValueError("simply_val must be between 5 and 100. simply_val = 100 creates a mesh with no simplification.")
     if smooth_val < 0 or smooth_val > 10:
         raise ValueError("smooth_val must be between 0 and 10. smooth_val = 0 creates a mesh with no smoothing.")
+    
+    # Calculate NIFTI volume
+    nifti_array = nib.load(nii_dir).get_fdata()
+    nbVoxels = count_nonzero(nifti_array)
+    ax,ay,az = grid_scale
+    volVoxels = nbVoxels*ax*ay*az
 
-    # Construct output file name if not provided
-    if not out_name:
+    # Create output file's name if not provided
+    if out_name == "":
         mesh_name_parts = ["mesh", str(library)]
         if simply_val < 100:
             mesh_name_parts.append(f"simp={simply_val}")
@@ -97,12 +112,25 @@ def generate_from_nii(
             mesh_name_parts.append(f"smooth={smooth_val}")
         out_name = "_".join(mesh_name_parts)
         
+    # Create output folder if it doesn't exist
+    makedirs(out_dir, exist_ok=True)
+        
     # ------------------------------
     # CREATE THE MESH
     # ------------------------------
     
     if library == "pymeshlab":
         print("\n--------------------\n     PYMESHLAB      \n--------------------\n")
+        mesh_path = mesh_gen_pylab(
+            input_file = nii_dir, 
+            out_name = out_name, 
+            out_dir = out_dir, 
+            out_type = out_type, 
+            simplify = simplify,
+            simply_val = simply_val,
+            smoothing = smoothing,
+            smooth_val = smooth_val,
+            grid_scale = grid_scale)
         
     elif library == "nii2mesh":
         print("\n--------------------\n      NII2MESH      \n--------------------\n")
@@ -115,18 +143,33 @@ def generate_from_nii(
                 simply_val = simply_val,
                 smooth_val = smooth_val,
                 verbose = True)
-        print("mesh path :", mesh_path)
+        
+    elif library == "vtk":
+        print("\n--------------------\n        VTK        \n--------------------\n")
+        mesh_path = mesh_gen_vtk(
+                input_file = nii_dir, 
+                out_name = out_name, 
+                out_dir = out_dir)
+        
     else:
         raise ValueError("Wrong Library Name")
     
+    if mesh_path == None:
+        raise TypeError("Mesh did not generate successfully")
+
     # ------------------------------
     # SHOW THE MESH
     # ------------------------------
     
+    elapsed_time = time.time() - initial_time
+    
+    print("Calculating volume...")
+    volMesh = vol_obj(mesh_path)
+    print("Mesh Volume : ", volMesh )
+    
     if visualize:
         print("Showing generated Mesh...")
         show_obj(mesh_path)
-        print("Volume =", vol_obj(mesh_path))
     
     # ------------------------------
     # SAVE MESH DATA
@@ -134,16 +177,27 @@ def generate_from_nii(
     
     if info_doc:
         print("Saving Mesh info...")
-        doc_obj(mesh_path)
-
-
-
-
-
+        doc_obj(
+            mesh_file       = path.basename(mesh_path),
+            nifti_file      = path.basename(nii_dir),
+            mesh_path       = mesh_path,
+            label_volume    = volVoxels,
+            mesh_volume     = volMesh,
+            error           = abs(volVoxels-volMesh)/volVoxels,
+            size            = path.getsize(mesh_path),
+            library         = library,
+            smoothing       = smoothing,
+            smooth_val      = smooth_val,
+            simplify        = simplify,
+            simply_val      = simply_val,
+            elapsed_time    = elapsed_time )
 
 
 
 """
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+
 (DEPENDS ON THE LIBRARY) specifications :
 
 ____________________________
@@ -162,7 +216,7 @@ ____LIBRARY = "pymeshlab"___
 "mdc"  = Meshing Decimation Clustering            
     --> Simplification is too intense, mesh loses its volume properties
         --> simply_val = percentage of simplification
-        --> example : simply_val = 5  # means 5% of simplification
+        --> example : simply_val = 5  # means 5% of the vertices will be kept
 
 ___ --> no simplification (RECOMMENDED)
         --> Pymeshlab's simplification methods are likely to create too much volume loss... 
