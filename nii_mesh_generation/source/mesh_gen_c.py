@@ -4,7 +4,14 @@ import subprocess
 import os
 import shutil
 
-def mesh_gen_nii2mesh(nii2mesh_path, input_file, out_name, out_dir, out_type, smooth_val = 0, simply_val = 100, verbose = False):
+def mesh_gen_nii2mesh(nii2mesh_path, 
+                      input_file, 
+                      out_name, 
+                      out_dir, 
+                      out_type, 
+                      smooth_val = 0, 
+                      simply_val = 100, 
+                      verbose = False):
     """    
     Generates a mesh using nii2mesh code, made on C.
     
@@ -50,29 +57,27 @@ def mesh_gen_nii2mesh(nii2mesh_path, input_file, out_name, out_dir, out_type, sm
         raise FileNotFoundError("nii2mesh executable not found.")
     except subprocess.CalledProcessError:
         raise subprocess.CalledProcessError("nii2mesh command failed to execute.")
-    
-    file = os.path.join(nii2mesh_path, f'{out_name}{"." + out_type}')
-    
-    # Create the directory if it doesn't exists
-    os.makedirs(out_dir, exist_ok=True)
+
+    file_name = f'{out_name}{"." + out_type}'
+    file_path = os.path.join(nii2mesh_path, file_name)
     
     # Saving the file
     # Handles duplicates by creating "suffixes" of already existing names
     try:
-        shutil.move(file, out_dir)
-        new_file = file
+        shutil.move(file_path, out_dir)
+        new_file_path = os.path.join(out_dir, file_name)
     except shutil.Error:
         suffix = 1
         new_file_name = f"{out_name}_{suffix}.{out_type}" 
-        new_file = os.path.join(out_dir, new_file_name) 
-        while os.path.exists(new_file):
+        new_file_path = os.path.join(out_dir, new_file_name) 
+        while os.path.exists(new_file_path):
             suffix += 1
             new_file_name = f"{out_name}_{suffix}.{out_type}" 
-            new_file = os.path.join(out_dir, new_file_name) 
-        shutil.move(file, new_file)
-    
-    print("TREST#ETSTEET")
-    return new_file
+            new_file_path = os.path.join(out_dir, new_file_name) 
+        shutil.move(file_path, new_file_path)
+
+    return new_file_path
+
 
 
 

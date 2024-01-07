@@ -6,8 +6,8 @@ from objtools import *
 # _______________________________ INPUT ZONE ___________________________________
 
 directory       = path.join( getcwd(), "additional_mesh_utils")
-out_folder_dir  = path.join(directory, "3D_output", "generated_from_c")
-pic_folder_dir  = path.join(directory, "3D_output_pictures","generated_from_python", "nii2mesh" )
+out_folder_dir  = path.join(directory, "3D_output", "generated_from_python")
+pic_folder_dir  = path.join(directory, "3D_output_pictures","generated_from_python", "sartorius" )
 xls_folder_dir  = path.join(directory, "3D_output_statistics")
 
 # ______________________________________________________________________________
@@ -34,7 +34,15 @@ cam_sartorius = dict(
     clipping_range=(1.21400, 1214.00),
 )
 
+cam_gluteus_nii2mesh = dict(
+    position=(-250.991, 580.044, -277.731),
+    focal_point=(-101.011, -55.4166, 82.7566),
+    viewup=(0.463350, 0.517465, 0.719400),
+    distance=745.825,
+    clipping_range=(446.515, 1124.39),
+)
+
 chdir(pic_folder_dir) # Switch to the meshs' pictures directory
-showFolderCam(out_folder_dir, cam_gluteus, z=1.65, save_image = False, show_3d = False, show_details = True, name = "nii2mesh")
+showFolderCam(out_folder_dir, cam_sartorius, z=1.65, save_image = True, show_3d = False, show_details = True, name = "nii2mesh")
 
 

@@ -48,4 +48,6 @@ chdir(pic_folder_dir)
 m_path = path.join(out_folder_dir, filename)
 print("Path = ", m_path)
 
-showObj(m_path, save_image = False, show_3d = True)
+#showObj(m_path, save_image = False, show_3d = True)
+
+print(calculate_obj_volume(m_path))

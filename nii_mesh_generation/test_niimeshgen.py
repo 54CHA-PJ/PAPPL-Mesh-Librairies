@@ -2,38 +2,33 @@ from os import path
 from pathlib import Path
 
 from nii_mesh_gen import generate_from_nii
-from source.mesh_tools import showObj
 
 # ______________________________________________________________________________
-# _______________________________ INPUT ZONE ___________________________________
+# _______________________ INPUT ZONE FOR MANUAL TESTING ________________________
 
-manual_test = False
+manual_test = True
 
 directory           = (Path(__file__).resolve()).parent
 
 labelmap_folder     = path.join(directory, "input_files")
 labelmap_name       = "gluteus_max.nii.gz"
-
 output_folder       = path.join(directory, "output_files")
-output_name         = "TEST_N2M"
+output_name         = ""
 output_type         = "obj"
-
-library     = "nii2mesh"
-
+library     = "vtk"
 simplify    = ""
-simply_val  = 0
-smoothing   = ""
-smooth_val  = 0
-
-info_doc    = False
+simply_val  = 100
+smoothing   = "lap"
+smooth_val  = 10
+info_doc    = True
 visualize   = True
 
 # ______________________________________________________________________________
 # ______________________________________________________________________________
-
  
 if manual_test:
     # Test avec tous les paramètres
+    print("\n---- MANUAL TEST ----")
     generate_from_nii(
                 nii_dir     = path.join(labelmap_folder, labelmap_name), 
                 library     = library, 
@@ -49,33 +44,67 @@ if manual_test:
 else :
 
     # -------------------
+    #      PYMESHLAB
+    # -------------------
+    
+    # Test basique
+    generate_from_nii(
+        nii_dir     = path.join(labelmap_folder, labelmap_name), 
+        out_dir     = output_folder,
+        library     = "pymeshlab")
+    
+    # Test avec lissage
+    generate_from_nii(
+        nii_dir     = path.join(labelmap_folder, labelmap_name), 
+        out_dir     = output_folder,
+        library     = "pymeshlab",
+        smoothing   = "lap",
+        smooth_val  = 10)
+
+    # Test avec simplification (Edge Collapse for Marching Cubes) et lissage
+    generate_from_nii(
+        nii_dir     = path.join(labelmap_folder, labelmap_name), 
+        out_dir     = output_folder,
+        library     = "pymeshlab",
+        smoothing   = "lap",
+        smooth_val  = 10,
+        simplify    = "edmc")
+    
+    # Test avec simplification (Mesh Decimation Clustering) et lissage
+    generate_from_nii(
+        nii_dir     = path.join(labelmap_folder, labelmap_name), 
+        out_dir     = output_folder,
+        library     = "pymeshlab",
+        smoothing   = "lap",
+        smooth_val  = 3,
+        simplify    = "mdc",
+        simply_val  = 80)
+
+    # -------------------
+    #      NII2MESH
+    # -------------------
+
+    # -------------------
     #      NII2MESH
     # -------------------
 
     # Test basique
     p1 = generate_from_nii(
                 nii_dir     = path.join(labelmap_folder, labelmap_name), 
-                library     = "nii2mesh", 
-                out_dir     = output_folder, 
-                visualize   = True)
+                out_dir     = output_folder,
+                library     = "nii2mesh")
 
     # Test avec lissage
     p2 = generate_from_nii(
                 nii_dir     = path.join(labelmap_folder, labelmap_name), 
                 out_dir     = output_folder,
                 library     = "nii2mesh", 
-                smooth_val  = 10, 
-                visualize   = True)
+                smooth_val  = 10)
 
-    # Test avec reduction
+    # Test avec reduction et lissage
     p3 = generate_from_nii(
                 nii_dir     = path.join(labelmap_folder, labelmap_name), 
                 out_dir     = output_folder,
                 library     = "nii2mesh", 
                 simply_val  = 50,
-                smooth_val  = 10, 
-                visualize   = True) 
-    
-    showObj("nii_mesh_generation\\output_files\\mesh_nii2mesh.obj")
-    showObj("nii_mesh_generation\\output_files\\mesh_nii2mesh_smooth=10.obj")
-    showObj("nii_mesh_generation\\output_files\\mesh_nii2mesh_simp=50_smooth=10.obj")
+                smooth_val  = 10) 
