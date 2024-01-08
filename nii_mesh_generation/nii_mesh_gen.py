@@ -178,6 +178,8 @@ def generate_from_nii(
     if info_doc:
         print("Saving Mesh info...")
         doc_obj(
+            output_folder   = out_dir,
+            name = path.basename(mesh_path),
             mesh_file       = path.basename(mesh_path),
             nifti_file      = path.basename(nii_dir),
             mesh_path       = mesh_path,

@@ -18,6 +18,9 @@ xls_folder_dir  = path.join(directory, "3D_output_statistics")
 
 print("\n----- Gluteus Max -----")
 
+# Cameras that provide the "best point of view" of a muscle
+# Obtained with Vedo visualization interface
+
 cam_gluteus = dict(
     position=(488.535, -228.916, 759.305),
     focal_point=(179.000, 287.500, 949.500),

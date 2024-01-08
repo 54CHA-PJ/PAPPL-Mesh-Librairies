@@ -1,3 +1,5 @@
+from os import chdir, getcwd
+
 def show_obj(mesh_path):
     from vedo import load, Plotter
     print("_____________________")
@@ -22,6 +24,8 @@ def vol_obj(file_path):
     return(volume)
     
 def doc_obj(
+    output_folder,
+    name,
     mesh_file,
     nifti_file,
     mesh_path,
@@ -38,8 +42,11 @@ def doc_obj(
     
     import datetime
     current_date_time = datetime.datetime.now().strftime("%m/%d/%Y - %H:%M:%S")
+    
+    dir = getcwd()
+    chdir(output_folder)
 
-    with open("output.txt", "w") as file:
+    with open(name+".txt", "w") as file:
         file.write("Mesh file\t: {}\n".format(mesh_file))
         file.write("Nifti file\t: {}\n\n".format(nifti_file))
         file.write("--- INFO ---\n")
@@ -57,5 +64,8 @@ def doc_obj(
         file.write("\nElapsed time\t: {} s\n".format(elapsed_time))
         file.write("Date\t: {}\n".format(current_date_time))
         file.write("\n{}".format(mesh_path))
+    
+    print("file saved successfully as : \n" + name + ".txt")
+    chdir(dir)
 
         
