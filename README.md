@@ -25,9 +25,9 @@ More precisely, the code allows to :
 
 
 It uses already-existing libraries :
-- Pymeshlab : [(GitHub)](https://github.com/neurolabusc/nii2mesh)
+- Pymeshlab : [(GitHub)](https://github.com/cnr-isti-vclab/PyMeshLab)
 - VTK (Python) : [(GitHub)](https://github.com/Kitware/VTK)
-- Nii2mesh (C) : [(GitHub)](https://github.com/cnr-isti-vclab/PyMeshLab)
+- Nii2mesh (C) : [(GitHub)](https://github.com/neurolabusc/nii2mesh)
 
 ## Project hierarchy and files
 
