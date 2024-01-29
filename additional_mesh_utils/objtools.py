@@ -192,7 +192,16 @@ def showError(nbVoxels, volume):
     
     print("Erreur volumétrique: \n",round((diff/nbVoxels)*100, 5), "%")
 
+# ----------------------------------
+# Volume d'un .obj
+# ----------------------------------
+
 def vol_obj(file_path):
+    """Calcule le volume d'un objet .obj avec la méthode incluse dans VTK.
+    Attention : ne fonctionne qu'avec un type .OBJ (pas STL)
+    Args:
+        file_path (string): path to the .obj file
+    """
     reader = vtk.vtkOBJReader()
     reader.SetFileName(file_path)
     reader.Update()
@@ -202,6 +211,17 @@ def vol_obj(file_path):
     # Print the volume
     volume = mass.GetVolume()
     return(volume)
+
+def vol_obj_2(file_path):
+    """Calcule le volume d'un objet .obj avec la méthode incluse dans Pymeshlab.
+    Cette méthode semble moins fiable que celle de VTK
+    Args:
+        file_path (string): path to the .obj file
+    """
+    import pymeshlab
+    mset = pymeshlab.MeshSet()
+    mset.load_new_mesh(file_path)
+    return (pymeshlab_volume(mset))
 
 # ----------------------------------
 # Temps d'execution
