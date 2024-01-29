@@ -7,7 +7,7 @@ from objtools import *
 
 directory       = path.join( getcwd(), "additional_mesh_utils")
 out_folder_dir  = path.join(directory, "3D_output", "generated_from_python")
-pic_folder_dir  = path.join(directory, "3D_output_pictures","generated_from_python", "sartorius" )
+pic_folder_dir  = path.join(directory, "3D_output_pictures","generated_from_python" )
 xls_folder_dir  = path.join(directory, "3D_output_statistics")
 
 # ______________________________________________________________________________
@@ -45,7 +45,14 @@ cam_gluteus_nii2mesh = dict(
     clipping_range=(446.515, 1124.39),
 )
 
+
+out_1  = path.join(directory, "3D_output", "generated_from_python", "gluteus")
+out_2  = path.join(directory, "3D_output", "generated_from_python", "sartorius")
+out_3  = path.join(directory, "3D_output", "generated_from_c")
+
 chdir(pic_folder_dir) # Switch to the meshs' pictures directory
-showFolderCam(out_folder_dir, cam_sartorius, z=1.65, save_image = True, show_3d = False, show_details = True, name = "nii2mesh")
-
-
+showFolderCam(out_1, cam_gluteus, z=1.65, save_image = False, show_3d = False, show_details = True, name = "gluteus")
+chdir(pic_folder_dir) # Switch to the meshs' pictures directory
+showFolderCam(out_2, cam_sartorius, z=5, save_image = False, show_3d = False, show_details = True, name = "sartorius")
+chdir(pic_folder_dir) # Switch to the meshs' pictures directory
+showFolderCam(out_3, cam_gluteus_nii2mesh, z=1.65, save_image = False, show_3d = False, show_details = True, name = "nii2mesh")

@@ -1,5 +1,32 @@
 # NIIFTI MESH GENERATION (nii_mesh_gen.py)
 
+Authors: **Sacha Cruz, Mario Espinoza**
+Date: **28/01/2024**
+```c
+________________________________
+|                              |
+|   NIFTI -> MESH GENERATION   |
+|             ---              |
+|        nii_mesh_gen.py       |
+|______________________________|
+
+This code uses three functional libraries (Pymeshlab, VTK and Nii2Mesh) to convert a binary Label-map on a NIFTI format to a Mesh.
+
+REQUIREMENTS:
+- To use the Nii2Mesh library, you need Windows OS because it requires Command Prompt.
+- You can also write the command manually in Linux or Mac environments. (See the nii2mesh section)
+
+COMPATIBILITY:
+- The script works well on Python versions 3.8 - 3.11.
+- Mesh visualization may not be compatible with Python 3.10 - 3.11.
+- (TODO) Library versions :
+    - PyMeshLab (Mesh creation): 
+    - VTK (Mesh creation):
+    - Nii2Mesh (Mesh creation):
+    - Vedo (Plotting)
+    
+```
+
 Here are the details of the function **generate_from_nii** in the code _nii_mesh_gen.py_
 
 ```python
@@ -26,18 +53,19 @@ grid_scale      (tuple, optional):  Grid normalization coefficients.
              
 library         (str, optional):    Choose the library : "pymeshlab" / "nii2mesh" / "vtk".
 
-simplify        (str, optional):    Choose the simplification method.           (DEPENDS OF THE LIBRARY)
-smoothing       (str, optional):    Choose the smoothing method.                (DEPENDS OF THE LIBRARY)
-smooth_val      (float, optional):  The coefficient of the smoothing method.    (DEPENDS OF THE LIBRARY)
-simply_val      (float, optional):  The coefficient of the simplifying method.  (DEPENDS OF THE LIBRARY)
-out_type        (str, optional):    Choose the output file type : "obj" / "stl".(DEPENDS OF THE LIBRARY)
+simplify        (str, optional):    Choose the simplification method.           (DEPENDS ON THE LIBRARY)
+smoothing       (str, optional):    Choose the smoothing method.                (DEPENDS ON THE LIBRARY)
+smooth_val      (float, optional):  The coefficient of the smoothing method.    (DEPENDS ON THE LIBRARY)
+simply_val      (float, optional):  The coefficient of the simplifying method.  (DEPENDS ON THE LIBRARY)
+out_type        (str, optional):    Choose the output mesh file type.           (DEPENDS ON THE LIBRARY)
 
 out_dir         (str, optional):    Choose the output directory.
 out_name        (str, optional):    Choose a name for the file. If no name is chosen, the default name is made using the other parameters.
 info_doc        (bool, optional):   If true, creates a TXT document containing useful information. (Volume, file size, volumetric error, ...)
 
-visualize       (bool, optional):   If true, opens a wintow to visualize the 3D mesh after creating it.
+visualize       (bool, optional):   If true, opens a window to visualize the 3D mesh after creating it.
 ```
+## (DEPENDS ON THE LIBRARY) DETAILS :
 
 ### LIBRARY = "pymeshlab"
 

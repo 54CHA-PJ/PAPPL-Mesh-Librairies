@@ -12,8 +12,8 @@ import numpy as np
 # _______________________________ INPUT ZONE ___________________________________
 
 directory       = path.join( getcwd(), "additional_mesh_utils")
-labelmap_dir    = path.join(directory, "Labelmap_input", "gluteus_max.nii.gz")
-out_folder_dir  = path.join(directory, "3D_output", "generated_from_python")
+labelmap_dir    = path.join(directory, "Labelmap_input", "sartorius.nii.gz")
+out_folder_dir  = path.join(directory, "3D_output", "generated_from_python", "sartorius")
 
 print(labelmap_dir)
 
@@ -171,7 +171,10 @@ print("\nSans lissage")
 mesh_vf_nonsmooth = vf.Mesh.marchingCubes(vf_test, False)
 liste_voxelfuse["mesh_vf_nonsmooth"]=mesh_vf_nonsmooth
 
-print("\nAvec lissage") #Takes 3 minutes ...
+print("\n - Skipping VoxelFuse smoothing functions because of extreme timing issues")
+print("\n - Skipping VoxelFuse mesh exporting to STL because of the huge file size")
+
+# print("\nAvec lissage") #Takes 3 minutes ...
 mesh_vf_smooth = vf.Mesh.marchingCubes(vf_test, True)
 liste_voxelfuse["mesh_vf_smooth"]=mesh_vf_smooth
 

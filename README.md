@@ -2,20 +2,13 @@
 
 Authors: **Sacha Cruz, Mario Espinoza**
 
-Date: **05/12/2023**
+Date: **28/01/2024**
 ```c
 ________________________________
 |                              |
 |   NIFTI -> MESH GENERATION   |
 |______________________________|
 
-Requirements:
-- To use the Nii2Mesh library, you need Windows OS because it requires Command Prompt.
-- You can also write the command manually in Linux or Mac environments. (See the nii2mesh section)
-
-Compatibility:
-- The script works well on Python versions 3.8 - 3.11.
-- Mesh visualization may not be compatible with Python 3.10 - 3.11.
 ```
 
 ## About the project
@@ -69,4 +62,3 @@ It uses already-existing libraries :
 > > *_objtools.py_* <br>
 > > _test_libraries_311.py_ <br>
 > > *_test_libraries_308.py_* <br>
-
