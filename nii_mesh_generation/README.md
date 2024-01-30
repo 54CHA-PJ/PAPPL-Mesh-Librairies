@@ -1,5 +1,6 @@
-# NIIFTI MESH GENERATION (nii_mesh_gen.py)
+[MAIN README HERE](https://github.com/54CHA-PJ/PAPPL-Mesh-Librairies/blob/master/README.md)
 
+# NIIFTI MESH GENERATION (nii_mesh_gen.py)
 Authors: **Sacha Cruz, Mario Espinoza**
 Date: **28/01/2024**
 ```c
