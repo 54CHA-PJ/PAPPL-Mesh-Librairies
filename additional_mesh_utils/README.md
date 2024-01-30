@@ -1,4 +1,4 @@
-# ADDITIONAL MESH UTILS (nii_mesh_gen.py)
+# ADDITIONAL MESH UTILS
 
 Authors: **Sacha Cruz**
 Date: **28/01/2024**
