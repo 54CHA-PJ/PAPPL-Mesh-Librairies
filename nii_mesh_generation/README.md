@@ -19,12 +19,11 @@ REQUIREMENTS:
 COMPATIBILITY:
 - The script works well on Python versions 3.8 - 3.11.
 - Mesh visualization may not be compatible with Python 3.10 - 3.11.
-- (TODO) Library versions :
-    - PyMeshLab (Mesh creation): 
-    - VTK (Mesh creation):
-    - Nii2Mesh (Mesh creation):
-    - Vedo (Plotting)
-    
+- Library versions :
+    - Pymeshlab : 2022.2.post4
+    - VTK : 9.3.0
+    - Nii2Mesh : 1.0.2
+    - vedo : 2023.5.0
 ```
 
 Here are the details of the function **generate_from_nii** in the code _nii_mesh_gen.py_

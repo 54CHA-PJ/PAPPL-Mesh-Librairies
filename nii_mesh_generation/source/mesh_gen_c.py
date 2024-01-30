@@ -48,15 +48,15 @@ def mesh_gen_nii2mesh(nii2mesh_path,
         param += "-v 1"
     
     print(param)
-    command = f'nii2mesh {input_file} {param} {out_name}{"." + out_type}'
+    command = f'nii2mesh "{input_file}" {param} "{out_name}{"." + out_type}"'
     full_command = f'cd {nii2mesh_path} && {command}'
     
     try:
         subprocess.run(full_command, shell=True, check=True, cwd=nii2mesh_path)
     except FileNotFoundError:
         raise FileNotFoundError("nii2mesh executable not found.")
-    except subprocess.CalledProcessError:
-        raise subprocess.CalledProcessError("nii2mesh command failed to execute.")
+    except subprocess.CalledProcessError as e:
+        raise subprocess.CalledProcessError(e.returncode, e.cmd, output=e.output, stderr=e.stderr) from None
 
     file_name = f'{out_name}{"." + out_type}'
     file_path = os.path.join(nii2mesh_path, file_name)

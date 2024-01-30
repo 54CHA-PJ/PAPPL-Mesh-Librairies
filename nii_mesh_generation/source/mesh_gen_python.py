@@ -20,7 +20,7 @@ def mesh_gen_pylab(
     # Read the nii file
     nifti_array = nib.load(input_file).get_fdata()
     # Marching Cubes
-    verts, faces, normals, values = measure.marching_cubes(nifti)
+    verts, faces, normals, values = measure.marching_cubes(nifti_array)
     # Create Mesh
     mesh = pymeshlab.Mesh(verts, faces)
     # Create Meshset
@@ -68,10 +68,12 @@ def mesh_gen_pylab(
         suffix += 1
         new_file = path.join(out_dir, out_name + "_" + str(suffix) + "." + out_type)
     mset.save_current_mesh(new_file)
+    print(new_file + " saved successfully")
     return new_file
     
 def mesh_gen_vtk(input_file, out_dir = ".", out_name = ""):
     import vtk
+    from os import getcwd, path, chdir
     # Keep the initial directory in memory
     initial_dir = getcwd()
     # Read the NIFTI file
@@ -96,17 +98,19 @@ def mesh_gen_vtk(input_file, out_dir = ".", out_name = ""):
     render_window.AddRenderer(renderer)
     # Handles duplicates by creating "suffixes" of already existing names
     new_file_name = out_name
-    new_file = path.join(out_dir, new_file_name + ".obj")
+    new_file = path.join(out_dir, new_file_name)
     suffix = 0
-    while path.isfile(new_file):    
+    while path.isfile(new_file + ".obj"):    
         suffix += 1
         new_file_name = out_name + "_" + str(suffix)
-        new_file = path.join(out_dir, new_file_name + ".obj")
+        new_file = path.join(out_dir, new_file_name)
     # Create an exporter object
     chdir(out_dir)
     export_vtk = vtk.vtkOBJExporter()
     export_vtk.SetInput(render_window)
+    # Remove the '.obj' extension when setting the file prefix
     export_vtk.SetFilePrefix(new_file)
     export_vtk.Write()
     chdir(initial_dir)
-    return new_file
+    print(new_file + ".obj saved successfully")
+    return new_file + ".obj"

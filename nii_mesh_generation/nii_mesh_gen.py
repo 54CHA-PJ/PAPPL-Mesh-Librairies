@@ -150,10 +150,8 @@ def generate_from_nii(
                 input_file = nii_dir, 
                 out_name = out_name, 
                 out_dir = out_dir)
-        
     else:
         raise ValueError("Wrong Library Name")
-    
     if mesh_path == None:
         raise TypeError("Mesh did not generate successfully")
 

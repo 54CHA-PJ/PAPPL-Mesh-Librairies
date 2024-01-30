@@ -15,10 +15,10 @@ labelmap_name       = "gluteus_max.nii.gz"
 output_folder       = path.join(directory, "output_files")
 output_name         = ""
 output_type         = "obj"
-library     = "nii2mesh"
+library     = "pymeshlab"
 simplify    = ""
-simply_val  = 15
-smoothing   = "lap"
+simply_val  = 100
+smoothing   = ""
 smooth_val  = 10
 info_doc    = True
 visualize   = True
@@ -81,8 +81,13 @@ else :
         simply_val  = 80)
 
     # -------------------
-    #      NII2MESH
+    #      VTK
     # -------------------
+
+    generate_from_nii(
+        nii_dir     = path.join(labelmap_folder, labelmap_name), 
+        out_dir     = output_folder,
+        library     = "vtk")
 
     # -------------------
     #      NII2MESH
