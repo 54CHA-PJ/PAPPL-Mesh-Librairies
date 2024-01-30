@@ -11,11 +11,8 @@ ________________________________
 |        nii_mesh_gen.py       |
 |______________________________|
 
-This code uses three functional libraries (Pymeshlab, VTK and Nii2Mesh) to convert a binary Label-map on a NIFTI format to a Mesh.
-
-REQUIREMENTS:
-- To use the Nii2Mesh library, you need Windows OS because it requires Command Prompt.
-- You can also write the command manually in Linux or Mac environments. (See the nii2mesh section)
+This code converts a binary Label-map on a NIFTI format to a Mesh.
+Here the processes are automated and made in batches to make comparisons between different parameters
 
 COMPATIBILITY:
 - The script works well on Python versions 3.8 - 3.11.
