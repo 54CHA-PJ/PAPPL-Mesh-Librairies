@@ -31,7 +31,7 @@ It uses already-existing libraries :
 
 ## Project hierarchy and files
 
-1. The main code is under the folder : **nii_mesh_generation** [README FILE HERE](https://github.com/54CHA-PJ/PAPPL-Mesh-Librairies/blob/master/additional_mesh_utils/README.md)
+1. The main code is under the folder : **nii_mesh_generation** [README FILE HERE](https://github.com/54CHA-PJ/PAPPL-Mesh-Librairies/blob/master/nii_mesh_generation/README.md)
     * The main function is on the _*nii_mesh_gen.py*_ file
     * You can learn how it works on the _*test_nii_mesh_gen.py*_ file
     * It calls functions from internal libraries :
